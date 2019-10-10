@@ -9,5 +9,5 @@
 import Foundation
 
 struct MercuryContainer: Codable {
-    var a: [MercuryItem]
+    var mercury: [MercuryItem]
 }

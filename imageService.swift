@@ -21,21 +21,27 @@ class imageService {
         // network call and store its result in the dictionary as well as calling
         // the completion. This would allow the _second_ call for any image to not
         // perform a network operation!
-        if record[url] != nil {
+        if self.record[url] != nil {
             return record[url]!
         }
         
+        var image: UIImage? = nil
         let request = URLRequest(url: url)
+        let semaphore = DispatchSemaphore(value: 0)
         let session = URLSession(configuration: .ephemeral)
         let task = session.dataTask(with: request) { (data, response, error) in
-            let image = UIImage(data: data!)
+            image = UIImage(data: data!)
             self.record[url] = image
+            semaphore.signal()
         }
+        task.resume()
+        semaphore.wait()
         return record[url]!
-            
-        }        // Do any additional setup after loading the view.    }}
-
+        
     }
+    
+}
+
 
 
     
